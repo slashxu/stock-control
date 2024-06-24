@@ -36,7 +36,7 @@ export class HomeComponent {
   onSubmitLoginForm(): void {
     console.log('Dados do formulario de login', this.loginForm.value);
     if(this.loginForm.value && this.loginForm.valid){
-      this.userService.authuser(this.loginForm.value as AuthRequest)
+      this.userService.authUser(this.loginForm.value as AuthRequest)
       .subscribe({
         next: (response) => {
           if(response){
