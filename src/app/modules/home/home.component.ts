@@ -1,3 +1,4 @@
+import { MessageService } from 'primeng/api';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Component } from '@angular/core';
 import { UserService } from 'src/app/services/user/user.service';
@@ -28,7 +29,8 @@ export class HomeComponent {
   constructor(
     private FormBuilder: FormBuilder, 
     private userService: UserService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private messageService: MessageService
   ){}
 
   onSubmitLoginForm(): void {
@@ -39,11 +41,25 @@ export class HomeComponent {
         next: (response) => {
           if(response){
             this.cookieService.set('User_Info', response?.token);
-
             this.loginForm.reset();
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Sucesso',
+              detail: `Bem vindo de volta ${response?.name}!`,
+              life: 2000,
+            });
           }
         },
-        error: (err) => console.log(err), 
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: `Erro ao fazer o login!`,
+            life: 2000,
+          });
+          console.log(err)
+        }  
       })
     }
 
@@ -56,12 +72,26 @@ export class HomeComponent {
       .subscribe({
         next: (response) => {
           if(response){
-            alert('Usuario teste criado com sucesso!');
             this.signupForm.reset();
             this.loginCard = true;
+
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Sucesso',
+              detail: 'Usuário criado com sucesso!',
+              life: 2000,
+            });
           }
         },
-        error: (err) => console.log(err),
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: `Erro ao criar usuário!`,
+            life: 2000,
+          });
+          console.log(err);
+        },
       })
     }
   }
